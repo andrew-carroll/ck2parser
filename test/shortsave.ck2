@@ -1,0 +1,34 @@
+CK2txt
+	version="2.7.1.0"
+	date="2856.5.2"
+	player=
+	{
+		id=3022622
+		type=66
+	}
+	player_shield=
+	{
+		data={0 8 0 30 0 0 0}
+		religion="catholic"
+	}
+	player_realm="e_gothamite"
+	is_zeus_save=yes
+	game_rules=
+	{
+		minor_epidemics="fewer"
+		adventurers="none"
+	}
+	game_speed=1
+	mapmode=6
+	dyn_title=
+	{
+		title="b_dyn_3008615"
+		is_dynamic=yes
+	}
+	dyn_title=
+	{
+		title="d_dyn_411978721"
+		base_title="d_peten"
+		is_custom=yes
+		is_dynamic=yes
+	}
