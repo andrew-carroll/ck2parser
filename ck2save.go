@@ -5,20 +5,22 @@ import (
 	"io"
 )
 
+type property interface{}
+
 type propMap struct {
 	name        string
-	property    map[string]string
+	property    map[string]property
 	propMapList []propMap
 }
 
 type CK2Save struct {
-	property    map[string]string
+	property    map[string]property
 	propMapList []propMap
 }
 
 func NewCK2Save(filepath string) CK2Save {
 	s := CK2Save{}
-	s.property = make(map[string]string)
+	s.property = make(map[string]property)
 
 	r, fClose := openFileReader(filepath)
 	defer fClose()
@@ -42,6 +44,13 @@ func (s *CK2Save) parseLine(line string) {
 	l := NewCK2Line(line)
 	switch l.pattern {
 	case newPropPattern:
-		s.property[l.name] = l.value
+		switch l.propertyType {
+		case propQuotedDate:
+			s.property[l.name] = NewCK2Date(l.value, true)
+		case propUnquotedDate:
+			s.property[l.name] = NewCK2Date(l.value, false)
+		default:
+			s.property[l.name] = l.value
+		}
 	}
 }

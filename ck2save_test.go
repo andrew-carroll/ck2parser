@@ -18,10 +18,10 @@ func TestParsesCK2Save(t *testing.T) {
 		expectValue(t, `"2.7.1.0"`, save.property["version"])
 	})
 	t.Run("parses date", func(t *testing.T) {
-		d := NewCK2Date("2856.5.2")
-		expectValue(t, 2856, d.year)
-		expectValue(t, 5, int(d.month))
-		expectValue(t, 2, d.day)
+		d := save.property["date"]
+		expectValue(t, 2856, d.(CK2Date).year)
+		expectValue(t, 5, int(d.(CK2Date).month))
+		expectValue(t, 2, d.(CK2Date).day)
 	})
 }
 
