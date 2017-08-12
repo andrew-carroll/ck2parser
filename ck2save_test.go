@@ -17,6 +17,12 @@ func TestParsesCK2Save(t *testing.T) {
 	t.Run("parses version", func(t *testing.T) {
 		expectValue(t, `"2.7.1.0"`, save.property["version"])
 	})
+	t.Run("parses date", func(t *testing.T) {
+		d := NewCK2Date("2856.5.2")
+		expectValue(t, 2856, d.year)
+		expectValue(t, 5, int(d.month))
+		expectValue(t, 2, d.day)
+	})
 }
 
 func TestMatchesLinePatterns(t *testing.T) {
@@ -76,4 +82,17 @@ func TestPropertyTypes(t *testing.T) {
 			t.Errorf("NewCK2Line(%q).propertyType => %q,\t\twant %q (name: %q | value: %q)", tt.line, l.propertyType, tt.propertyType, l.name, l.value)
 		}
 	}
+}
+
+func TestOpensMaps(t *testing.T) {
+
+}
+
+func TestMapStorage(t *testing.T) {
+	t.Run("newNamedMapSameLinePattern", func(t *testing.T) {
+	})
+	t.Run("newUnnamedMapPattern", func(t *testing.T) {
+	})
+	t.Run("endMapPattern", func(t *testing.T) {
+	})
 }

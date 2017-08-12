@@ -3,25 +3,26 @@ package ck2save
 import (
 	"bufio"
 	"io"
-	"os"
 )
 
-type player struct {
-	id string
+type propMap struct {
+	name        string
+	property    map[string]string
+	propMapList []propMap
 }
 
 type CK2Save struct {
-	property map[string]string
+	property    map[string]string
+	propMapList []propMap
 }
 
 func NewCK2Save(filepath string) CK2Save {
 	s := CK2Save{}
 	s.property = make(map[string]string)
 
-	f, e := os.Open(filepath)
-	checkError(e)
-	defer closeFile(f)
-	s.readLines(bufio.NewReader(f))
+	r, fClose := openFileReader(filepath)
+	defer fClose()
+	s.readLines(r)
 
 	return s
 }
@@ -42,15 +43,5 @@ func (s *CK2Save) parseLine(line string) {
 	switch l.pattern {
 	case newPropPattern:
 		s.property[l.name] = l.value
-	}
-}
-
-func closeFile(f *os.File) {
-	checkError(f.Close())
-}
-
-func checkError(e error) {
-	if e != nil {
-		panic(e)
 	}
 }
