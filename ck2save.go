@@ -24,10 +24,11 @@ func NewCK2Save(filepath string) CK2Save {
 func (s *CK2Save) parseLine(rawLine string) {
 	l := newCK2Line(rawLine)
 	switch l.pattern {
-	case newNamedMapSameLinePattern:
+	case newUnnamedMapPattern, newNamedMapSameLinePattern, newNamedMapPattern:
 		s.newPropMap(l.name, l.pattern)
-	case newNamedMapPattern:
-		s.newPropMap(l.name, l.pattern)
+	case endMapPattern:
+		parent := s.propMapList[s.curPropMap.parentIndex]
+		s.curPropMap = parent
 	case newPropPattern:
 		switch l.propertyType {
 		case propQuotedDate:

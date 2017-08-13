@@ -53,9 +53,18 @@ func TestMapStorage(t *testing.T) {
 	t.Run("newUnnamedMapPattern", func(t *testing.T) {
 		p := "\t{\n"
 		s := newTestCK2Save("test")
-		s.curPropMap.pattern = newNamedMapPattern
+		s.curPropMap.pattern = newNamedMapSameLinePattern
 		s.parseLine(p)
+		assert.Equal(t, "", s.curPropMap.name)
+		assert.Equal(t, newUnnamedMapPattern, s.curPropMap.pattern)
 	})
 	t.Run("endMapPattern", func(t *testing.T) {
+		p := "\t}\n"
+		s := newTestCK2Save("test")
+		s.curPropMap.pattern = newUnnamedMapPattern
+		s.newPropMap("player", newNamedMapPattern)
+		assert.Equal(t, "player", s.curPropMap.name)
+		s.parseLine(p)
+		assert.Equal(t, "test", s.curPropMap.name)
 	})
 }
