@@ -1,21 +1,11 @@
 package ck2save
 
-import (
-	"bufio"
-	"io"
-)
-
 type property interface{}
-
-type propMap struct {
-	name        string
-	property    map[string]property
-	propMapList []propMap
-}
 
 type CK2Save struct {
 	property    map[string]property
 	propMapList []propMap
+	curPropMap  propMap
 }
 
 func NewCK2Save(filepath string) CK2Save {
@@ -27,17 +17,6 @@ func NewCK2Save(filepath string) CK2Save {
 	s.readLines(r)
 
 	return s
-}
-
-func (s *CK2Save) readLines(r *bufio.Reader) {
-	for {
-		l, e := r.ReadString('\n')
-		if e == io.EOF {
-			break
-		}
-		checkError(e)
-		s.parseLine(l)
-	}
 }
 
 func (s *CK2Save) parseLine(line string) {

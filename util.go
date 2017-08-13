@@ -2,6 +2,7 @@ package ck2save
 
 import (
 	"bufio"
+	"io"
 	"os"
 )
 
@@ -10,6 +11,17 @@ func openFileReader(filepath string) (r *bufio.Reader, close func()) {
 	checkError(e)
 	return bufio.NewReader(file), func() {
 		checkError(file.Close())
+	}
+}
+
+func (s *CK2Save) readLines(r *bufio.Reader) {
+	for {
+		l, e := r.ReadString('\n')
+		if e == io.EOF {
+			break
+		}
+		checkError(e)
+		s.parseLine(l)
 	}
 }
 
