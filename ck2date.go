@@ -10,7 +10,7 @@ type ck2Date struct {
 	day   int
 }
 
-func NewCK2Date(rawString string, quoted bool) ck2Date {
+func newCK2Date(rawString string, quoted bool) ck2Date {
 	switch quoted {
 	case true:
 		timeFormat := `"2006.1.2"`

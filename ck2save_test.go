@@ -20,15 +20,41 @@ func TestParsesCK2Save(t *testing.T) {
 	})
 }
 
+func newTestCK2Save(name string) *CK2Save {
+	s := CK2Save{}
+	s.property = make(map[string]property)
+	s.curPropMap = newPropMap("test", undefinedPattern, 0, -1)
+	s.propMapList = append(s.propMapList, s.curPropMap)
+	return &s
+}
+
 func TestMapStorage(t *testing.T) {
 	t.Run("newNamedMapSameLinePattern", func(t *testing.T) {
-		p := "\t\tunborn={\n"
-		s := CK2Save{}
-		s.property = make(map[string]property)
-		s.curPropMap = *newPropMap("test")
+		p := "\t\t\tunborn={\n"
+		s := newTestCK2Save("test")
+		assert.Equal(t, "test", s.curPropMap.name)
+		assert.Equal(t, undefinedPattern, s.curPropMap.pattern)
 		s.parseLine(p)
+		par := s.propMapList[s.curPropMap.parentIndex]
+		assert.Equal(t, newNamedMapSameLinePattern, s.curPropMap.pattern)
+		assert.Equal(t, "test", par.name)
+		assert.Equal(t, "unborn", s.curPropMap.name)
+	})
+	t.Run("newNamedMapPattern", func(t *testing.T) {
+		p := "\tplayer=\n"
+		s := newTestCK2Save("test")
+		assert.Equal(t, s.curPropMap.name, "test")
+		s.parseLine(p)
+		par := s.propMapList[s.curPropMap.parentIndex]
+		assert.Equal(t, newNamedMapPattern, s.curPropMap.pattern)
+		assert.Equal(t, "test", par.name)
+		assert.Equal(t, "player", s.curPropMap.name)
 	})
 	t.Run("newUnnamedMapPattern", func(t *testing.T) {
+		p := "\t{\n"
+		s := newTestCK2Save("test")
+		s.curPropMap.pattern = newNamedMapPattern
+		s.parseLine(p)
 	})
 	t.Run("endMapPattern", func(t *testing.T) {
 	})

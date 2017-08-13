@@ -19,23 +19,23 @@ func TestMatchesLinePatterns(t *testing.T) {
 		{"\t\tunborn={\n", newNamedMapSameLinePattern},
 	}
 	for _, tt := range patternMatchTests {
-		l := NewCK2Line(tt.line)
+		l := newCK2Line(tt.line)
 		if l.pattern != tt.pattern {
-			t.Errorf("NewCK2Line(%q).pattern => %q, want %q", tt.line, l.pattern, tt.pattern)
+			t.Errorf("newCK2Line(%q).pattern => %q, want %q", tt.line, l.pattern, tt.pattern)
 		}
 	}
 }
 
 func TestParsesPropKeysAndValues(t *testing.T) {
 	line := "\t\tid=3022622\n"
-	l := NewCK2Line(line)
+	l := newCK2Line(line)
 	k, v := l.name, l.value
 	wk, wv := "id", "3022622"
 	if v != wv {
-		t.Errorf("NewCK2Line(%q).value => %q, want %q", line, v, wv)
+		t.Errorf("newCK2Line(%q).value => %q, want %q", line, v, wv)
 	}
 	if k != wk {
-		t.Errorf("NewCK2Line(%q).name => %q, want %q", line, k, wk)
+		t.Errorf("newCK2Line(%q).name => %q, want %q", line, k, wk)
 	}
 }
 
@@ -56,7 +56,7 @@ func TestPropertyTypes(t *testing.T) {
 		{"\t\t\t\tgelleys_f={27.292 33.000}\n", propDecArray},
 	}
 	for _, tt := range propertyTypeTests {
-		l := NewCK2Line(tt.line)
+		l := newCK2Line(tt.line)
 		if l.propertyType != tt.propertyType {
 			t.Errorf("NewCK2Line(%q).propertyType => %q,\t\twant %q (name: %q | value: %q)", tt.line, l.propertyType, tt.propertyType, l.name, l.value)
 		}

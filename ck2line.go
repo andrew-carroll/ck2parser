@@ -1,6 +1,6 @@
 package ck2save
 
-type CK2Line struct {
+type ck2Line struct {
 	rawLine      string
 	pattern      pattern
 	name         string
@@ -11,7 +11,7 @@ type CK2Line struct {
 type pattern string
 type propertyType string
 
-func (ck2line *CK2Line) DeterminePattern() {
+func (ck2line *ck2Line) determinePattern() {
 	ck2line.pattern = undefinedPattern
 	for n, r := range reg {
 		if r.MatchString(ck2line.rawLine) {
@@ -27,7 +27,7 @@ func (ck2line *CK2Line) DeterminePattern() {
 	}
 }
 
-func (ck2line *CK2Line) DeterminePropertyType() {
+func (ck2line *ck2Line) determinePropertyType() {
 	ck2line.propertyType = propString
 	for p, r := range propReg {
 		if r.MatchString(ck2line.value) {
@@ -36,25 +36,25 @@ func (ck2line *CK2Line) DeterminePropertyType() {
 	}
 }
 
-func NewCK2Line(l string) CK2Line {
-	ck2line := CK2Line{}
-	ck2line.rawLine = l
-	ck2line.DeterminePattern()
-	switch ck2line.pattern {
+func newCK2Line(s string) ck2Line {
+	l := ck2Line{}
+	l.rawLine = s
+	l.determinePattern()
+	switch l.pattern {
 	case newNamedMapPattern:
-		matches := reg[newNamedMapPattern].FindAllStringSubmatch(l, -1)[0]
-		ck2line.name = matches[1]
+		matches := reg[newNamedMapPattern].FindAllStringSubmatch(s, -1)[0]
+		l.name = matches[1]
 	case newNamedMapSameLinePattern:
-		matches := reg[newNamedMapSameLinePattern].FindAllStringSubmatch(l, -1)[0]
-		ck2line.name = matches[1]
+		matches := reg[newNamedMapSameLinePattern].FindAllStringSubmatch(s, -1)[0]
+		l.name = matches[1]
 	case newPropPattern:
-		matches := reg[newPropPattern].FindAllStringSubmatch(l, -1)[0]
-		ck2line.name, ck2line.value = matches[1], matches[2]
-		ck2line.DeterminePropertyType()
+		matches := reg[newPropPattern].FindAllStringSubmatch(s, -1)[0]
+		l.name, l.value = matches[1], matches[2]
+		l.determinePropertyType()
 	case newUnnamedMapPattern, headerPattern, endMapPattern, emptyLinePattern, undefinedPattern:
 	default:
 		panic("Expected ck2line.pattern to be defined")
 	}
 
-	return ck2line
+	return l
 }
