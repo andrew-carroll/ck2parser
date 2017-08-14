@@ -27,8 +27,7 @@ func (s *CK2Save) parseLine(rawLine string) {
 	case newUnnamedMapPattern, newNamedMapSameLinePattern, newNamedMapPattern:
 		s.newPropMap(l.name, l.pattern)
 	case endMapPattern:
-		parent := s.propMapList[s.curPropMap.parentIndex]
-		s.curPropMap = parent
+		s.closePropMap()
 	case newPropPattern:
 		switch l.propertyType {
 		case propQuotedDate:
@@ -41,8 +40,13 @@ func (s *CK2Save) parseLine(rawLine string) {
 	}
 }
 
+func (s *CK2Save) closePropMap() {
+	parent := s.propMapList[s.curPropMap.parentIndex]
+	s.curPropMap = parent
+}
+
 func (s *CK2Save) newPropMap(name string, pattern pattern) {
-	index := len(s.propMapList) - 1
+	index := len(s.propMapList)
 	s.curPropMap = s.curPropMap.newPropMap(name, pattern, index)
 	s.propMapList = append(s.propMapList, s.curPropMap)
 }

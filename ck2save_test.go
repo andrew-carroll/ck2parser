@@ -68,3 +68,23 @@ func TestMapStorage(t *testing.T) {
 		assert.Equal(t, "test", s.curPropMap.name)
 	})
 }
+
+func TestPrintsSaveFile(t *testing.T) {
+	s := newTestCK2Save("test")
+	s.newPropMap("CK2txt", headerPattern)
+	s.newPropMap("player", newNamedMapPattern)
+	s.newPropMap("", newUnnamedMapPattern)
+	s.curPropMap.property["id"] = "100"
+	s.curPropMap.property["type"] = "66"
+	s.closePropMap()
+	expected := "CK2txt\n" +
+		"player=\n" +
+		"{\n" +
+		"id=100\n" +
+		"type=66\n" +
+		"}\n" +
+		"}\n"
+	builder := newCK2SaveFileBuilder(s)
+	actual := builder.buildSaveFile()
+	assert.Equal(t, expected, actual)
+}
