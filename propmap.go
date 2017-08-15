@@ -3,7 +3,8 @@ package ck2save
 type propMap struct {
 	name        string
 	property    map[string]property
-	propMapList []propMap
+	propKeys    []string
+	propMapList []*propMap
 	pattern     pattern
 	parentIndex int
 	index       int
@@ -21,6 +22,11 @@ func newPropMap(name string, pattern pattern, index int, parentIndex int) *propM
 
 func (p *propMap) newPropMap(name string, pattern pattern, index int) *propMap {
 	pm := *newPropMap(name, pattern, index, p.index)
-	p.propMapList = append(p.propMapList, pm)
+	p.propMapList = append(p.propMapList, &pm)
 	return &pm
+}
+
+func (p *propMap) setProperty(name string, value property) {
+	p.property[name] = value
+	p.propKeys = append(p.propKeys, name)
 }

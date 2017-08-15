@@ -34,6 +34,14 @@ func (ck2line *ck2Line) determinePropertyType() {
 			ck2line.propertyType = p
 		}
 	}
+	if ck2line.propertyType == propString {
+		switch {
+		case propReg[propQuotedDate].MatchString(ck2line.value):
+			ck2line.propertyType = propQuotedDate
+		case propReg[propUnquotedDate].MatchString(ck2line.value):
+			ck2line.propertyType = propUnquotedDate
+		}
+	}
 }
 
 func newCK2Line(s string) ck2Line {

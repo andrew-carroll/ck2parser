@@ -24,25 +24,35 @@ func NewCK2Save(filepath string) CK2Save {
 func (s *CK2Save) parseLine(rawLine string) {
 	l := newCK2Line(rawLine)
 	switch l.pattern {
-	case newUnnamedMapPattern, newNamedMapSameLinePattern, newNamedMapPattern:
+	case headerPattern:
+		s.newPropMap("CK2txt", l.pattern)
+	case newUnnamedMapPattern, newNamedMapSameLinePattern:
+		s.newPropMap(l.name, l.pattern)
+	case newNamedMapPattern:
 		s.newPropMap(l.name, l.pattern)
 	case endMapPattern:
 		s.closePropMap()
+		if s.curPropMap.pattern == newNamedMapPattern {
+			s.closePropMap()
+		}
 	case newPropPattern:
 		switch l.propertyType {
 		case propQuotedDate:
-			s.property[l.name] = newCK2Date(l.value, true)
+			s.curPropMap.setProperty(l.name, newCK2Date(l.value, true))
 		case propUnquotedDate:
-			s.property[l.name] = newCK2Date(l.value, false)
+			s.curPropMap.setProperty(l.name, newCK2Date(l.value, false))
 		default:
-			s.property[l.name] = l.value
+			s.curPropMap.setProperty(l.name, l.value)
 		}
 	}
 }
 
+func (s *CK2Save) parent(p *propMap) *propMap {
+	return s.propMapList[p.parentIndex]
+}
+
 func (s *CK2Save) closePropMap() {
-	parent := s.propMapList[s.curPropMap.parentIndex]
-	s.curPropMap = parent
+	s.curPropMap = s.parent(s.curPropMap)
 }
 
 func (s *CK2Save) newPropMap(name string, pattern pattern) {

@@ -10,10 +10,10 @@ var shortsave string = "./shortsave.ck2"
 func TestParsesCK2Save(t *testing.T) {
 	save := NewCK2Save(shortsave)
 	t.Run("parses version", func(t *testing.T) {
-		assert.Equal(t, `"2.7.1.0"`, save.property["version"])
+		assert.Equal(t, `"2.7.1.0"`, save.propMapList[0].propMapList[0].property["version"])
 	})
 	t.Run("parses date", func(t *testing.T) {
-		d := save.property["date"]
+		d := save.propMapList[0].propMapList[0].property["date"]
 		assert.Equal(t, 2856, d.(ck2Date).year)
 		assert.Equal(t, 5, d.(ck2Date).month)
 		assert.Equal(t, 2, d.(ck2Date).day)
@@ -71,13 +71,18 @@ func TestMapStorage(t *testing.T) {
 
 func TestPrintsSaveFile(t *testing.T) {
 	s := newTestCK2Save("test")
-	s.newPropMap("CK2txt", headerPattern)
-	s.newPropMap("player", newNamedMapPattern)
-	s.newPropMap("", newUnnamedMapPattern)
-	s.curPropMap.property["id"] = "100"
-	s.curPropMap.property["type"] = "66"
-	s.closePropMap()
+	s.parseLine("CK2txt\n")
+	s.parseLine("version=\"2.7.1.0\"\n")
+	s.parseLine("date=\"2856.5.2\"\n")
+	s.parseLine("player=\n")
+	s.parseLine("{\n")
+	s.parseLine("id=100\n")
+	s.parseLine("type=66\n")
+	s.parseLine("}\n")
+	s.parseLine("}\n")
 	expected := "CK2txt\n" +
+		"version=\"2.7.1.0\"\n" +
+		"date=\"2856.5.2\"\n" +
 		"player=\n" +
 		"{\n" +
 		"id=100\n" +

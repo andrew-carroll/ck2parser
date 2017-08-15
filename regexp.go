@@ -31,7 +31,7 @@ var reg = map[pattern]*regexp.Regexp{
 	newNamedMapSameLinePattern: regexp.MustCompile(`^\t*` + w + `=\{\n$`),
 	newUnnamedMapPattern:       regexp.MustCompile(`^\t*\{\n$`),
 	endMapPattern:              regexp.MustCompile(`^\t*}\n$`),
-	newPropPattern:             regexp.MustCompile(`^\t*` + w + `=(.+)\n$`),
+	newPropPattern:             regexp.MustCompile(`^\t*` + w + `=("?.+"?)\n$`),
 }
 
 var propDate string = `(\d{3,4})\.(\d{1,2})\.(\d{1,2})`
