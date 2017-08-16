@@ -3,16 +3,16 @@ package ck2save
 type property interface{}
 
 type CK2Save struct {
-	property    map[string]property
-	propMapList []*propMap
+	Property    map[string]property
+	PropMapList []*propMap
 	curPropMap  *propMap
 }
 
 func NewCK2Save(filepath string) CK2Save {
 	s := CK2Save{}
-	s.property = make(map[string]property)
+	s.Property = make(map[string]property)
 	s.curPropMap = newPropMap("root", undefinedPattern, 0, -1)
-	s.propMapList = append(s.propMapList, s.curPropMap)
+	s.PropMapList = append(s.PropMapList, s.curPropMap)
 
 	r, fClose := openFileReader(filepath)
 	defer fClose()
@@ -48,7 +48,7 @@ func (s *CK2Save) parseLine(rawLine string) {
 }
 
 func (s *CK2Save) parent(p *propMap) *propMap {
-	return s.propMapList[p.parentIndex]
+	return s.PropMapList[p.parentIndex]
 }
 
 func (s *CK2Save) closePropMap() {
@@ -56,7 +56,7 @@ func (s *CK2Save) closePropMap() {
 }
 
 func (s *CK2Save) newPropMap(name string, pattern pattern) {
-	index := len(s.propMapList)
+	index := len(s.PropMapList)
 	s.curPropMap = s.curPropMap.newPropMap(name, pattern, index)
-	s.propMapList = append(s.propMapList, s.curPropMap)
+	s.PropMapList = append(s.PropMapList, s.curPropMap)
 }

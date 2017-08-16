@@ -14,6 +14,14 @@ func openFileReader(filepath string) (r *bufio.Reader, close func()) {
 	}
 }
 
+func openFileWriter(filepath string) (w *bufio.Writer, close func()) {
+	file, e := os.Create(filepath)
+	checkError(e)
+	return bufio.NewWriter(file), func() {
+		checkError(file.Close())
+	}
+}
+
 func (s *CK2Save) readLines(r *bufio.Reader) {
 	for {
 		l, e := r.ReadString('\n')
