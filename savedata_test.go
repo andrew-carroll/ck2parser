@@ -30,11 +30,10 @@ func TestSaveDataAddProperty(t *testing.T) {
 
 func TestSaveDataAddPropertyListProperty(t *testing.T) {
 	var sd *SaveData = NewSaveData()
-	var ps []*Property
-	var p *Property = newProperty("test", &ps)
+	var p *Property = newProperty("test", "")
 	sd.AddProperty(p)
 	p.AddProperty(newProperty("test", "one"))
 	p.AddProperty(newProperty("test2", "two"))
-	assert.Equal(t, "one", sd.Property("test").Property("test"))
-	assert.Equal(t, "two", sd.Property("test").Property("test2"))
+	assert.Equal(t, "one", sd.Property("test").Property("test").Value)
+	assert.Equal(t, "two", sd.Property("test").Property("test2").Value)
 }

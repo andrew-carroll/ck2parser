@@ -1,35 +1,28 @@
 package ck2save
 
-import (
-	"fmt"
-)
-
 // Property represents a key/value property in a CK2 save file.
 type Property struct {
 	Name        string
-	Value       interface{}
+	Value       string
 	property    []*Property
 	propertyMap map[string]*Property
 }
 
-func newProperty(name string, value interface{}) *Property {
-	p := Property{Name: name, propertyMap: make(map[string]*Property)}
-	switch v := value.(type) {
-	case string:
-		p.Value = value
-	case *[]*Property:
-		p.Value = value
-	default:
-		panic(fmt.Sprintf("unhandled property type %T", v))
+func newProperty(name string, value string) *Property {
+	p := Property{
+		Name:        name,
+		Value:       value,
+		propertyMap: make(map[string]*Property),
 	}
 	return &p
 }
 
-func (p *Property) Property(name string) interface{} {
-	prop := p.propertyMap[name]
-	return prop.Value
+// Property gets the Value of the specified member Property.
+func (p *Property) Property(name string) *Property {
+	return p.propertyMap[name]
 }
 
+// AddProperty adds the specified Property as a member.
 func (p *Property) AddProperty(prop *Property) {
 	p.property = append(p.property, prop)
 	p.propertyMap[prop.Name] = prop
