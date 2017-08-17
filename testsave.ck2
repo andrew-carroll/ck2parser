@@ -32,3 +32,7 @@ CK2txt
 		is_custom=yes
 		is_dynamic=yes
 	}
+	generated_societies=yes
+	generated_artifacts=yes
+	vc_data="CK2/branches/2_7_1\\n37283\\n"
+}
