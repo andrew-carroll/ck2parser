@@ -24,6 +24,17 @@ var shortsave = `CK2txt
 func TestSaveDataAddProperty(t *testing.T) {
 	var sd *SaveData = NewSaveData()
 	var p *Property = newProperty("version", `"2.7.1.0"`)
-	sd.AddProperty("version", p)
+	sd.AddProperty(p)
 	assert.Equal(t, p, sd.Property("version"))
+}
+
+func TestSaveDataAddPropertyListProperty(t *testing.T) {
+	var sd *SaveData = NewSaveData()
+	var ps []*Property
+	var p *Property = newProperty("test", &ps)
+	sd.AddProperty(p)
+	p.AddProperty(newProperty("test", "one"))
+	p.AddProperty(newProperty("test2", "two"))
+	assert.Equal(t, "one", sd.Property("test").Property("test"))
+	assert.Equal(t, "two", sd.Property("test").Property("test2"))
 }

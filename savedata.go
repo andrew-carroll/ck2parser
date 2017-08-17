@@ -6,14 +6,14 @@ type SaveData struct {
 }
 
 func NewSaveData() *SaveData {
-	sd := &SaveData{}
-	sd.propertyMap = make(map[string]*Property)
-	return sd
+	return &SaveData{
+		propertyMap: make(map[string]*Property),
+	}
 }
 
-func (sd *SaveData) AddProperty(name string, prop *Property) {
+func (sd *SaveData) AddProperty(prop *Property) {
 	sd.property = append(sd.property, prop)
-	sd.propertyMap[name] = prop
+	sd.propertyMap[prop.Name] = prop
 }
 
 func (sd *SaveData) Property(name string) *Property {
