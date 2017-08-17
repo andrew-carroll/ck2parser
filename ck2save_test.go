@@ -10,21 +10,21 @@ var shortsave string = "./shortsave.ck2"
 func TestParsesCK2Save(t *testing.T) {
 	save := NewCK2Save(shortsave)
 	t.Run("parses version", func(t *testing.T) {
-		assert.Equal(t, `"2.7.1.0"`, save.propMapList[0].propMapList[0].property["version"])
+		assert.Equal(t, `"2.7.1.0"`, save.PropMapList[0].propMapList[0].property["version"])
 	})
 	t.Run("parses date", func(t *testing.T) {
-		d := save.propMapList[0].propMapList[0].property["date"]
-		assert.Equal(t, 2856, d.(ck2Date).year)
-		assert.Equal(t, 5, d.(ck2Date).month)
-		assert.Equal(t, 2, d.(ck2Date).day)
+		d := save.PropMapList[0].propMapList[0].property["date"]
+		assert.Equal(t, 2856, d.(CK2Date).year)
+		assert.Equal(t, 5, d.(CK2Date).month)
+		assert.Equal(t, 2, d.(CK2Date).day)
 	})
 }
 
 func newTestCK2Save(name string) *CK2Save {
 	s := CK2Save{}
-	s.property = make(map[string]property)
+	s.Property = make(map[string]property)
 	s.curPropMap = newPropMap("test", undefinedPattern, 0, -1)
-	s.propMapList = append(s.propMapList, s.curPropMap)
+	s.PropMapList = append(s.PropMapList, s.curPropMap)
 	return &s
 }
 
@@ -35,7 +35,7 @@ func TestMapStorage(t *testing.T) {
 		assert.Equal(t, "test", s.curPropMap.name)
 		assert.Equal(t, undefinedPattern, s.curPropMap.pattern)
 		s.parseLine(p)
-		par := s.propMapList[s.curPropMap.parentIndex]
+		par := s.PropMapList[s.curPropMap.parentIndex]
 		assert.Equal(t, newNamedMapSameLinePattern, s.curPropMap.pattern)
 		assert.Equal(t, "test", par.name)
 		assert.Equal(t, "unborn", s.curPropMap.name)
@@ -45,7 +45,7 @@ func TestMapStorage(t *testing.T) {
 		s := newTestCK2Save("test")
 		assert.Equal(t, s.curPropMap.name, "test")
 		s.parseLine(p)
-		par := s.propMapList[s.curPropMap.parentIndex]
+		par := s.PropMapList[s.curPropMap.parentIndex]
 		assert.Equal(t, newNamedMapPattern, s.curPropMap.pattern)
 		assert.Equal(t, "test", par.name)
 		assert.Equal(t, "player", s.curPropMap.name)
@@ -89,7 +89,7 @@ func TestPrintsSaveFile(t *testing.T) {
 		"type=66\n" +
 		"}\n" +
 		"}\n"
-	builder := newCK2SaveFileBuilder(s)
-	actual := builder.buildSaveFile()
+	builder := NewCK2SaveFileBuilder(s)
+	actual := builder.WriteSaveFile()
 	assert.Equal(t, expected, actual)
 }
