@@ -22,7 +22,8 @@ var shortsave = `CK2txt
 `
 
 func TestSaveDataAddProperty(t *testing.T) {
-	var s *SaveData = NewSaveData()
-	s.AddProperty("version", `"2.7.1.0"`)
-	assert.Equal(t, property(`"2.7.1.0"`), s.Property("version"))
+	var sd *SaveData = NewSaveData()
+	var p *Property = newProperty("version", `"2.7.1.0"`)
+	sd.AddProperty("version", p)
+	assert.Equal(t, p, sd.Property("version"))
 }

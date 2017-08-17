@@ -1,20 +1,21 @@
 package ck2save
 
-type property string
 type SaveData struct {
-	property map[string]property
+	property    []*Property
+	propertyMap map[string]*Property
 }
 
 func NewSaveData() *SaveData {
 	sd := &SaveData{}
-	sd.property = make(map[string]property)
+	sd.propertyMap = make(map[string]*Property)
 	return sd
 }
 
-func (sd *SaveData) AddProperty(name string, prop property) {
-	sd.property[name] = prop
+func (sd *SaveData) AddProperty(name string, prop *Property) {
+	sd.property = append(sd.property, prop)
+	sd.propertyMap[name] = prop
 }
 
-func (sd *SaveData) Property(name string) property {
-	return sd.property[name]
+func (sd *SaveData) Property(name string) *Property {
+	return sd.propertyMap[name]
 }
