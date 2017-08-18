@@ -1,16 +1,14 @@
 package ck2save
 
 import (
+	"bufio"
 	"io"
 )
 
-type StringReader interface {
-	ReadString(byte) (string, error)
-}
-
-func ReadSaveFile(s *SaveData, r StringReader, parseLine func(string) *Property) error {
+func ReadSaveFile(r io.Reader, parseLine func(string) *Property) error {
+	b := bufio.NewReader(r)
 	for {
-		l, e := r.ReadString('\n')
+		l, e := b.ReadString('\n')
 		if e != nil {
 			switch e {
 			case io.EOF:
