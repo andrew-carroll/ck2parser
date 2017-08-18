@@ -4,16 +4,18 @@ package ck2save
 type Property struct {
 	Name        string
 	Value       string
+	Parent      *Property
 	property    []*Property
 	propertyMap map[string]*Property
 	pattern     pattern
 }
 
-func newProperty(name string, value string) *Property {
+func newProperty(name string, value string, pattern pattern) *Property {
 	p := Property{
 		Name:        name,
 		Value:       value,
 		propertyMap: make(map[string]*Property),
+		pattern:     pattern,
 	}
 	return &p
 }
@@ -27,4 +29,5 @@ func (p *Property) Property(name string) *Property {
 func (p *Property) AddProperty(prop *Property) {
 	p.property = append(p.property, prop)
 	p.propertyMap[prop.Name] = prop
+	prop.Parent = p
 }

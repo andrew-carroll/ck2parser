@@ -28,7 +28,7 @@ func ParseProperty(l string) (*Property, error) {
 	default:
 		return nil, UnhandledLinePatternError{pat}
 	}
-	p := newProperty(name, value)
+	p := newProperty(name, value, pat)
 	p.pattern = pat
 	return p, nil
 }
