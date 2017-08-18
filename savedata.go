@@ -1,8 +1,9 @@
 package ck2save
 
 type SaveData struct {
-	property    []*Property
-	propertyMap map[string]*Property
+	property       []*Property
+	propertyMap    map[string]*Property
+	PropertyCursor *Property
 }
 
 func NewSaveData() *SaveData {

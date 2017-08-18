@@ -6,6 +6,7 @@ type Property struct {
 	Value       string
 	property    []*Property
 	propertyMap map[string]*Property
+	pattern     pattern
 }
 
 func newProperty(name string, value string) *Property {
