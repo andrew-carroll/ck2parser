@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-func ReadSaveFile(r io.Reader, parseLine func(string) *Property) error {
+func ReadSaveFile(r io.Reader, parseLine func(string)) error {
 	b := bufio.NewReader(r)
 	for {
 		l, e := b.ReadString('\n')
